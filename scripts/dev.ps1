@@ -10,7 +10,9 @@ if (-not (Test-Path $python)) {
 }
 
 $api = "Set-Location '$raiz\api'; & '$python' -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload --no-access-log"
-$web = "Set-Location '$raiz\web'; pnpm dev"
+# Si pnpm no está en el PATH, se usa a través de corepack (incluido con Node.js).
+$pnpm = if (Get-Command pnpm -ErrorAction SilentlyContinue) { 'pnpm' } else { 'corepack pnpm' }
+$web = "Set-Location '$raiz\web'; `$env:COREPACK_ENABLE_DOWNLOAD_PROMPT='0'; $pnpm dev"
 
 Start-Process powershell -ArgumentList '-NoExit', '-Command', $api
 Start-Process powershell -ArgumentList '-NoExit', '-Command', $web
