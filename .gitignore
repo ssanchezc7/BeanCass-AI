@@ -2,3 +2,11 @@
 __pycache__/
 .ipynb_checkpoints/
 *.keras
+# Entorno y secretos
+.env
+.env.*
+!.env.example
+*.log
+
+# Modelos: solo se versionan los dos seleccionados que usa la API
+!api/models/*.keras
