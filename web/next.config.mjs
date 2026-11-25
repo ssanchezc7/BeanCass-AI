@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Imagen Docker: NEXT_OUTPUT=standalone genera un servidor autónomo (.next/standalone).
+  ...(process.env.NEXT_OUTPUT === 'standalone' ? { output: 'standalone' } : {}),
   // Los errores de TypeScript deben romper el build (antes estaba ignoreBuildErrors: true).
   images: {
     unoptimized: true,

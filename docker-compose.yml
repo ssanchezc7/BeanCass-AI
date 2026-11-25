@@ -1,0 +1,59 @@
+# BeanCass AI: API de inferencia (TensorFlow CPU) + web (Next.js).
+# Uso:  docker compose up --build   →  http://localhost:3000
+# Las variables se pueden sobrescribir con un archivo .env en la raíz (ver .env.example).
+services:
+  api:
+    build: ./api
+    environment:
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-8}
+      RATE_LIMIT: ${RATE_LIMIT:-20/minute}
+      # La API no se publica hacia el host: solo la alcanza el proxy de Next,
+      # así que puede confiar en X-Forwarded-For para el rate limit por usuario.
+      TRUST_FORWARDED_FOR: "true"
+      INFERENCE_TIMEOUT_S: ${INFERENCE_TIMEOUT_S:-30}
+      TF_INTRA_OP_THREADS: ${TF_INTRA_OP_THREADS:-0}
+      TF_INTER_OP_THREADS: ${TF_INTER_OP_THREADS:-0}
+      BEAN_T_MIN: ${BEAN_T_MIN:-}
+      BEAN_T_WARN: ${BEAN_T_WARN:-}
+      BEAN_T_MARGIN: ${BEAN_T_MARGIN:-}
+      CASSAVA_T_MIN: ${CASSAVA_T_MIN:-}
+      CASSAVA_T_WARN: ${CASSAVA_T_WARN:-}
+      CASSAVA_T_MARGIN: ${CASSAVA_T_MARGIN:-}
+    volumes:
+      - ./api/models:/app/models:ro
+    expose:
+      - "8000"
+    # Para depurar la API con curl desde el host, descomenta y pon TRUST_FORWARDED_FOR en "false":
+    # ports:
+    #   - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=4).status == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./web
+      args:
+        NEXT_PUBLIC_MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-8}
+    environment:
+      API_URL: http://api:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+    restart: unless-stopped
