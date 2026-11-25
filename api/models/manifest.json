@@ -1,0 +1,248 @@
+{
+  "manifest_version": 1,
+  "generated": "2026-11-25",
+  "image_size": 224,
+  "input_shape": [
+    null,
+    224,
+    224,
+    3
+  ],
+  "input_dtype": "float32",
+  "keras_version_training": "3.15.1",
+  "tensorflow_version_training": "2.21.0",
+  "selection_note": "Modelos seleccionados con Validation en el estudio; las métricas de Test son solo informativas.",
+  "models": {
+    "bean": {
+      "name": "MobileNetV2",
+      "version": "ajuste_fino_20261121_181000_639966",
+      "epoch": 6,
+      "file": "bean_mobilenetv2.keras",
+      "expected_layers": [
+        "imagen",
+        "normalizacion_mobilenetv2",
+        "mobilenetv2_1.00_224",
+        "dropout",
+        "clasificacion_beans"
+      ],
+      "parameters": 2261827,
+      "dataset": "Beans — Makerere AI Lab (TFDS beans)",
+      "preprocessing": {
+        "method": "resize_with_pad",
+        "antialias": true,
+        "clip": [
+          0,
+          255
+        ],
+        "dtype": "float32",
+        "description": "RGB en rango 0–255 (float32). tf.image.resize_with_pad a 224×224 con antialias (idéntico a tf.image.resize en fotos cuadradas como las de entrenamiento, 500×500) y clip 0–255. La normalización (Rescaling 1/127.5, offset −1) está DENTRO del modelo."
+      },
+      "metrics_validation": {
+        "modelo": "MobileNetV2",
+        "exactitud": 0.9473684210526315,
+        "precision_macro": 0.949537037037037,
+        "recall_macro": 0.9473063973063973,
+        "f1_macro": 0.9473555521036493,
+        "roc_auc_macro_ovr": 0.9943328415238527,
+        "perdida": 0.15760540962219238,
+        "enfermas_como_sanas": 1,
+        "parametros": 2261827,
+        "minutos_train_acumulados": 4.946166666666667,
+        "segundos_evaluacion": 4.841451699991012
+      },
+      "metrics_test": {
+        "imagenes": 128,
+        "exactitud": 0.96875,
+        "precision_macro": 0.9696476964769648,
+        "recall_macro": 0.9689922480620154,
+        "f1_macro": 0.9689754689754689,
+        "roc_auc_macro_ovr": 0.9963520291837664,
+        "errores": 4,
+        "enfermas_como_sanas": 0,
+        "recall_por_clase": {
+          "angular_leaf_spot": 0.9767441860465116,
+          "bean_rust": 0.9302325581395349,
+          "healthy": 1.0
+        },
+        "nota": "Los 4 errores ocurren entre enfermedades; ninguna hoja enferma se clasificó como sana."
+      },
+      "source_path": "beans/resultados/mobilenetv2/ajuste_fino_20261121_181000_639966/mejor_modelo.keras",
+      "sha256": "da6cff86d45d6eda23d9314e0bce703b02026ed846e13bf06887fe73414170ae",
+      "input_shape": [
+        null,
+        224,
+        224,
+        3
+      ],
+      "classes": [
+        {
+          "id": 0,
+          "code": "angular_leaf_spot",
+          "label_es": "Mancha angular",
+          "description": "Manchas foliares angulares causadas por un hongo."
+        },
+        {
+          "id": 1,
+          "code": "bean_rust",
+          "label_es": "Roya",
+          "description": "Pústulas de color óxido causadas por un hongo."
+        },
+        {
+          "id": 2,
+          "code": "healthy",
+          "label_es": "Hoja sana",
+          "description": "Sin síntomas visibles de las enfermedades evaluadas."
+        }
+      ],
+      "healthy_class": "healthy",
+      "thresholds": {
+        "t_min": 0.75,
+        "t_warn": 0.8,
+        "t_margin": 0.1,
+        "calibrated": {
+          "t_min": true,
+          "t_warn": false,
+          "t_margin": false
+        },
+        "source": "beans/resultados/comparacion_modelos/validation_20261122_184949_012897/predicciones_MobileNetV2.csv",
+        "summary_validation": {
+          "inconcluyentes": {
+            "n": 6,
+            "exactitud": 0.5
+          },
+          "concluyentes": {
+            "n": 127,
+            "exactitud": 0.9685
+          },
+          "confianza_alta": {
+            "n": 124,
+            "exactitud": 0.9677
+          }
+        }
+      }
+    },
+    "cassava": {
+      "name": "EfficientNetB0",
+      "version": "ajuste_fino_20261116_203639",
+      "epoch": 3,
+      "file": "cassava_efficientnetb0.keras",
+      "expected_layers": [
+        "imagen",
+        "efficientnetb0",
+        "dropout",
+        "clasificacion_cassava"
+      ],
+      "parameters": 4055976,
+      "dataset": "iCassava 2019 (TFDS cassava)",
+      "preprocessing": {
+        "method": "resize_with_pad",
+        "antialias": true,
+        "clip": [
+          0,
+          255
+        ],
+        "dtype": "float32",
+        "description": "RGB en rango 0–255 (float32). tf.image.resize_with_pad a 224×224 con antialias y clip 0–255, igual que en el entrenamiento. EfficientNetB0 normaliza internamente."
+      },
+      "metrics_validation": {
+        "modelo": "EfficientNetB0",
+        "conjunto": "validation_completa",
+        "imagenes": 1889,
+        "exactitud": 0.8221281101111699,
+        "precision_macro": 0.7697917401669827,
+        "recall_macro": 0.7615733212784599,
+        "f1_macro": 0.7647427036515128,
+        "roc_auc_macro_ovr": 0.9564978477002863,
+        "perdida": 0.5142385959625244,
+        "enfermas_como_sanas": 32,
+        "minutos_train_acumulados": null,
+        "parametros": 4055976,
+        "epoca_guardada_etapa": 3
+      },
+      "metrics_test": {
+        "imagenes": 1885,
+        "exactitud": 0.8228116710875332,
+        "precision_macro": 0.7466452361391218,
+        "recall_macro": 0.764333190226379,
+        "f1_macro": 0.7543579406260615,
+        "roc_auc_macro_ovr": 0.9582256331537792,
+        "errores": 334,
+        "enfermas_como_sanas": 40,
+        "recall_por_clase": {
+          "cbb": 0.6064516129032258,
+          "cbsd": 0.7713097713097713,
+          "cgm": 0.7829457364341085,
+          "cmd": 0.9085778781038375,
+          "healthy": 0.7523809523809524
+        },
+        "nota": "CBB y CBSD se confunden entre sí; 40 hojas enfermas se clasificaron como sanas."
+      },
+      "source_path": "cassava/resultados/efficientnetb0/ajuste_fino_20261116_203639/mejor_modelo.keras",
+      "sha256": "78f212f1875df8ea3d5a83ba7206cfad49ae617c18e12155ed0b0e9ff8d31fcc",
+      "input_shape": [
+        null,
+        224,
+        224,
+        3
+      ],
+      "classes": [
+        {
+          "id": 0,
+          "code": "cbb",
+          "label_es": "CBB — tizón bacteriano",
+          "description": "Lesiones angulares acuosas y marchitez por bacteria."
+        },
+        {
+          "id": 1,
+          "code": "cbsd",
+          "label_es": "CBSD — estría marrón",
+          "description": "Clorosis en venas y manchas amarillas causadas por virus."
+        },
+        {
+          "id": 2,
+          "code": "cgm",
+          "label_es": "CGM — daño por ácaro verde",
+          "description": "Moteado clorótico y hojas pequeñas por ácaros."
+        },
+        {
+          "id": 3,
+          "code": "cmd",
+          "label_es": "CMD — mosaico",
+          "description": "Mosaico amarillo-verde y deformación foliar por virus."
+        },
+        {
+          "id": 4,
+          "code": "healthy",
+          "label_es": "Hoja sana",
+          "description": "Sin síntomas visibles de las enfermedades evaluadas."
+        }
+      ],
+      "healthy_class": "healthy",
+      "thresholds": {
+        "t_min": 0.65,
+        "t_warn": 0.9,
+        "t_margin": 0.4,
+        "calibrated": {
+          "t_min": true,
+          "t_warn": true,
+          "t_margin": true
+        },
+        "source": "cassava/resultados/comparacion_modelos/validation_20261122_094623_066739/predicciones_EfficientNetB0.csv",
+        "summary_validation": {
+          "inconcluyentes": {
+            "n": 380,
+            "exactitud": 0.5053
+          },
+          "concluyentes": {
+            "n": 1509,
+            "exactitud": 0.9019
+          },
+          "confianza_alta": {
+            "n": 1020,
+            "exactitud": 0.9578
+          }
+        }
+      }
+    }
+  }
+}

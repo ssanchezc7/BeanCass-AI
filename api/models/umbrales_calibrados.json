@@ -1,0 +1,77 @@
+{
+  "criterio": "Ver docstring de api/scripts/calibrar_umbrales.py. Solo Validation; Test no se consulta.",
+  "cultivos": {
+    "bean": {
+      "fuente": "beans/resultados/comparacion_modelos/validation_20261122_184949_012897/predicciones_MobileNetV2.csv",
+      "particion": "validation",
+      "clases_csv": [
+        "angular_leaf_spot",
+        "bean_rust",
+        "healthy"
+      ],
+      "n": 133,
+      "exactitud_global": 0.9474,
+      "umbrales": {
+        "t_min": 0.75,
+        "t_warn": 0.8,
+        "t_margin": 0.1
+      },
+      "calibrado": {
+        "t_min": true,
+        "t_warn": false,
+        "t_margin": false
+      },
+      "resumen": {
+        "inconcluyentes": {
+          "n": 6,
+          "exactitud": 0.5
+        },
+        "concluyentes": {
+          "n": 127,
+          "exactitud": 0.9685
+        },
+        "confianza_alta": {
+          "n": 124,
+          "exactitud": 0.9677
+        }
+      }
+    },
+    "cassava": {
+      "fuente": "cassava/resultados/comparacion_modelos/validation_20261122_094623_066739/predicciones_EfficientNetB0.csv",
+      "particion": "validation",
+      "clases_csv": [
+        "cbb",
+        "cbsd",
+        "cgm",
+        "cmd",
+        "healthy"
+      ],
+      "n": 1889,
+      "exactitud_global": 0.8221,
+      "umbrales": {
+        "t_min": 0.65,
+        "t_warn": 0.9,
+        "t_margin": 0.4
+      },
+      "calibrado": {
+        "t_min": true,
+        "t_warn": true,
+        "t_margin": true
+      },
+      "resumen": {
+        "inconcluyentes": {
+          "n": 380,
+          "exactitud": 0.5053
+        },
+        "concluyentes": {
+          "n": 1509,
+          "exactitud": 0.9019
+        },
+        "confianza_alta": {
+          "n": 1020,
+          "exactitud": 0.9578
+        }
+      }
+    }
+  }
+}

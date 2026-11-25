@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest==9.2.0
+httpx==0.28.1
+# Opcional: pruebas `slow` con los datasets reales
+tensorflow-datasets==4.9.10
+importlib_resources==7.1.0

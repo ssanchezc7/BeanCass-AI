@@ -1,0 +1,13 @@
+# Backend de inferencia BeanCass AI — Python 3.12
+# TensorFlow/Keras fijados a las versiones del entrenamiento (un .keras de Keras 3.15 puede no cargar en versiones previas).
+tensorflow==2.21.0
+keras==3.15.1
+numpy==2.5.5
+pillow==13.0.0
+fastapi==0.165.0
+starlette==1.10.0
+uvicorn[standard]==0.54.0
+python-multipart==0.0.34
+pydantic==2.14.4
+pydantic-settings==2.16.3
+slowapi==0.1.10
