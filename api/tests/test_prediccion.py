@@ -150,7 +150,8 @@ def test_niveles_de_calidad():
     assert evaluar(np.array([0.95, 0.04, 0.01]), hoja, u, "bean", "x")["level"] == "ok"
     gris = np.full((64, 64, 3), 128, np.uint8)
     q = evaluar(np.array([0.95, 0.04, 0.01]), gris, u, "bean", "x")
-    assert q["level"] == "low_confidence" and any("no parece contener una hoja" in w for w in q["warnings"])
+    assert q["level"] == "inconclusive" and "posible_no_hoja" in q["signals"]["reasons"]
+    assert any("no parece contener una hoja" in w for w in q["warnings"])
 
 
 @pytest.mark.parametrize("ruta", ["web/public/placeholder.jpg", "web/public/placeholder-user.jpg", "web/public/placeholder-logo.png"])

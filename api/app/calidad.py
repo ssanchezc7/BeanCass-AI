@@ -11,7 +11,10 @@ ADV_NO_CONCLUYENTE = (
     "enfocando una sola hoja que ocupe la mayor parte del encuadre."
 )
 ADV_BAJA_CONFIANZA = "Confianza moderada: interpreta el resultado con precaución."
-ADV_NO_HOJA = "La imagen no parece contener una hoja (muy poca superficie verde o amarillo-verde)."
+ADV_NO_HOJA = (
+    "La imagen no parece contener una hoja (muy poca superficie verde o amarillo-verde). "
+    "Toma una foto de una sola hoja del cultivo, de cerca y con buena luz."
+)
 ADV_CASSAVA_SANA = (
     "En la evaluación de Test, este modelo clasificó 40 hojas de yuca enfermas como sanas. "
     "Una predicción de «Hoja sana» no garantiza la ausencia de enfermedad."
@@ -24,8 +27,11 @@ def entropia_normalizada(probs: np.ndarray) -> float:
 
 
 def proporcion_hoja(rgb: np.ndarray) -> float:
-    """Fracción aproximada de píxeles con tono de vegetación (amarillo → verde), saturación y brillo mínimos.
+    """Fracción aproximada de píxeles con tono de vegetación (amarillo-verde → verde), saturación y brillo mínimos.
 
+    Calibración (api/scripts/calibrar_hoja.py): con tono >= 40°, saturación >= 0,15 y umbral 0,12, ninguna de las
+    128 imágenes de Test de Beans ni de 400 de Validation de Cassava queda por debajo (mínimos 0,20 y 0,14), mientras
+    que 19 de 24 fotos genéricas que no son hojas sí lo hacen. Los paisajes con vegetación NO se detectan.
     Se calcula sobre una versión reducida (paso fijo) para que sea barata.
     """
     paso = max(1, int(max(rgb.shape[:2]) // 128))
@@ -40,7 +46,7 @@ def proporcion_hoja(rgb: np.ndarray) -> float:
         maximo == r, ((g - b) / d) % 6.0,
         np.where(maximo == g, (b - r) / d + 2.0, (r - g) / d + 4.0),
     ) * 60.0
-    vegetal = (hue >= 25) & (hue <= 170) & (sat >= 0.15) & (maximo >= 0.12) & (delta > 0.03)
+    vegetal = (hue >= 40) & (hue <= 170) & (sat >= 0.15) & (maximo >= 0.12) & (delta > 0.03)
     return float(vegetal.mean())
 
 
@@ -60,18 +66,20 @@ def evaluar(probs: np.ndarray, rgb: np.ndarray, umbrales: dict, cultivo: str, cl
     if entropia > umbrales["t_entropy"]:
         motivos.append("entropia_alta")
     parece_no_hoja = hoja < umbrales["min_leaf_ratio"]
+    if parece_no_hoja:
+        # Un softmax siempre elige una clase: si la foto no parece una hoja no se emite veredicto.
+        motivos.append("posible_no_hoja")
+        avisos.append(ADV_NO_HOJA)
 
     if motivos:
         nivel = "inconclusive"
-        avisos.append(ADV_NO_CONCLUYENTE)
-    elif top1 < umbrales["t_warn"] or parece_no_hoja:
+        if motivos != ["posible_no_hoja"]:
+            avisos.append(ADV_NO_CONCLUYENTE)
+    elif top1 < umbrales["t_warn"]:
         nivel = "low_confidence"
-        if top1 < umbrales["t_warn"]:
-            avisos.append(ADV_BAJA_CONFIANZA)
+        avisos.append(ADV_BAJA_CONFIANZA)
     else:
         nivel = "ok"
-    if parece_no_hoja:
-        avisos.append(ADV_NO_HOJA)
     if cultivo == "cassava" and clase_top == "healthy":
         avisos.append(ADV_CASSAVA_SANA)
 
