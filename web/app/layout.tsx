@@ -4,8 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'BeanCass AI — Clasificación foliar',
-  description: 'Explora una demostración visual de clasificación de condiciones foliares de fréjol y yuca.',
-  generator: 'v0.app',
+  description: 'Clasificación orientativa de enfermedades foliares de fréjol y yuca con modelos de visión entrenados (UNEMI).',
   icons: {
     icon: [
       {
